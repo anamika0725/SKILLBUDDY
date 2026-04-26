@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillBuddy | Skill Gap Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark">SB</div>
+        <div>
+          <p class="eyebrow">Future-ready learning</p>
+          <h1>SkillBuddy</h1>
+        </div>
+      </div>
+      <nav class="top-actions">
+        <button class="ghost-button" id="seedResetBtn" type="button">Reset Demo</button>
+        <button class="primary-button" id="openAuthBtn" type="button">Login / Register</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="section-tag">Skill Gap Analyzer for Students</p>
+          <h2>Map your current skills, discover what industry needs, and grow through groups and hackathons.</h2>
+          <p class="hero-text">
+            SkillBuddy helps students, placement cells, and companies collaborate around career readiness.
+            Compare your skills with job requirements, join targeted groups, and register for events that close the gap.
+          </p>
+          <div class="hero-actions">
+            <button class="primary-button" id="heroRegisterBtn" type="button">Get Started</button>
+            <button class="secondary-button" id="studentDemoBtn" type="button">Student Demo</button>
+            <button class="ghost-button" id="adminDemoBtn" type="button">Admin Demo</button>
+          </div>
+          <div class="stats-grid">
+            <article class="stat-card"><strong>12+</strong><span>Role templates</span></article>
+            <article class="stat-card"><strong>8</strong><span>Skill-focused groups</span></article>
+            <article class="stat-card"><strong>6</strong><span>Live hackathons</span></article>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <div class="glass-card">
+            <p class="mini-tag">Project workflow</p>
+            <ol class="soft-list">
+              <li>Student logs in and enters skills</li>
+              <li>System shows matched and missing skills</li>
+              <li>Student joins groups based on interests</li>
+              <li>Student registers for hackathons and events</li>
+              <li>Admin monitors progress and publishes opportunities</li>
+            </ol>
+          </div>
+          <div class="floating-card">
+            <span>Presentation ready</span>
+            <strong>Separated pages and files for easy explanation in college viva.</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-grid">
+        <article class="feature-card">
+          <p class="section-tag">Authentication</p>
+          <h3>Student and admin roles</h3>
+          <p>Separate login and registration flows unlock dashboards tailored for learners, placement cells, and company admins.</p>
+        </article>
+        <article class="feature-card">
+          <p class="section-tag">Skill Intelligence</p>
+          <h3>Readable gap reports</h3>
+          <p>Compare current skills with job requirements and get recommendations for missing competencies.</p>
+        </article>
+        <article class="feature-card">
+          <p class="section-tag">Community</p>
+          <h3>Groups and events</h3>
+          <p>Join skill-based communities, discover upcoming hackathons, and stay placement-ready together.</p>
+        </article>
+      </section>
+
+      <section class="showcase-grid">
+        <article class="showcase-card">
+          <p class="section-tag">Student module</p>
+          <h3>Skills, groups, and event registration in one dashboard</h3>
+          <p>Students can track skill readiness, add new competencies, join groups, and register for hackathons from one page.</p>
+        </article>
+        <article class="showcase-card">
+          <p class="section-tag">Admin module</p>
+          <h3>Requirements, communities, event management, and monitoring</h3>
+          <p>Placement cell or company admins can create job requirements, launch groups, publish events, and review progress.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="authDialog" class="auth-dialog">
+    <form method="dialog" class="dialog-shell">
+      <button type="submit" class="ghost-button">Close</button>
+    </form>
+    <div class="auth-grid">
+      <section class="auth-side">
+        <p class="section-tag">Welcome back</p>
+        <h3>Choose your role and continue building the right skills.</h3>
+        <p class="muted-text">Demo student: <strong>student@skillbuddy.com</strong> / <strong>student123</strong></p>
+        <p class="muted-text">Demo admin: <strong>admin@skillbuddy.com</strong> / <strong>admin123</strong></p>
+      </section>
+
+      <section class="auth-forms">
+        <div class="tab-row">
+          <button class="tab-button active" id="loginTabBtn" type="button">Login</button>
+          <button class="tab-button" id="registerTabBtn" type="button">Register</button>
+        </div>
+
+        <form id="loginForm" class="stack-form">
+          <select id="loginRole" required>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+          <input id="loginEmail" type="email" placeholder="Email address" required>
+          <input id="loginPassword" type="password" placeholder="Password" required>
+          <button class="primary-button" type="submit">Login</button>
+        </form>
+
+        <form id="registerForm" class="stack-form hidden">
+          <input id="registerName" type="text" placeholder="Full name" required>
+          <input id="registerEmail" type="email" placeholder="Email address" required>
+          <input id="registerPassword" type="password" placeholder="Create password" required>
+          <select id="registerRole" required>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+          <input id="registerTarget" type="text" placeholder="Target role (for students)" value="Frontend Developer">
+          <input id="registerSkills" type="text" placeholder="Skills separated by commas">
+          <button class="primary-button" type="submit">Create Account</button>
+        </form>
+
+        <p id="authMessage" class="form-message"></p>
+      </section>
+    </div>
+  </dialog>
+
+  <script type="module" src="assets/js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% block title %}SkillBuddy | Skill Gap Analyzer{% endblock %}
+
+{% block content %}
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="section-tag">Real Project Ready To Deploy</p>
+      <h2>Analyze skill gaps, manage groups, and run events with real database-backed records.</h2>
+      <p class="hero-text">
+        This version of SkillBuddy uses Django authentication and SQLite storage. Students can register,
+        manage their skills, join groups, and register for events. Admins can create job requirements,
+        groups, and hackathons from a real dashboard.
+      </p>
+      <div class="hero-actions">
+        <a class="primary-button" href="{% url 'register' %}">Create Account</a>
+        <a class="secondary-button" href="{% url 'login' %}">Login</a>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <div class="glass-card">
+        <p class="mini-tag">Workflow</p>
+        <ol class="soft-list">
+          <li>Register as student or admin</li>
+          <li>Store real skills and requirements in the database</li>
+          <li>Compare student skills with job requirements</li>
+          <li>Create and join groups</li>
+          <li>Publish and register for events</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'core/base.html' %}
+
+{% block title %}SkillBuddy | Admin Dashboard{% endblock %}
+{% block eyebrow %}Admin Space{% endblock %}
+
+{% block content %}
+<main class="dashboard-shell">
+  <section class="dashboard-header">
+    <div>
+      <p class="section-tag">Admin dashboard</p>
+      <h2>{{ user.first_name|default:user.username }}, here is your live project data.</h2>
+      <p class="muted-text">Create job requirements, groups, and events, then monitor student readiness.</p>
+    </div>
+    <form method="post" action="{% url 'delete_account' %}" class="stack-form">
+      {% csrf_token %}
+      <input type="hidden" name="confirm" value="on">
+      <button class="ghost-button" type="submit">Delete Account</button>
+    </form>
+  </section>
+
+  <section class="panel-grid three-column">
+    <article class="panel-card"><p class="mini-tag">Students</p><strong class="metric">{{ student_count }}</strong><span class="muted-text">Registered learners</span></article>
+    <article class="panel-card"><p class="mini-tag">Groups</p><strong class="metric">{{ group_count }}</strong><span class="muted-text">Communities managed</span></article>
+    <article class="panel-card"><p class="mini-tag">Events</p><strong class="metric">{{ event_count }}</strong><span class="muted-text">Open registrations</span></article>
+  </section>
+
+  <section class="panel-grid two-column">
+    <article class="panel-card">
+      <h3>Create job requirement</h3>
+      <form method="post" action="{% url 'create_job_requirement' %}" class="stack-form">
+        {% csrf_token %}
+        {{ role_form.as_p }}
+        <button class="primary-button" type="submit">Save Requirement</button>
+      </form>
+      <div class="stack-list tight">
+        {% for requirement in requirements %}
+          <article class="stack-item">
+            <div class="panel-title-row">
+              <h4>{{ requirement.title }}</h4>
+              <form method="post" action="{% url 'delete_job_requirement' requirement.id %}">
+                {% csrf_token %}
+                <button class="ghost-button" type="submit">Delete</button>
+              </form>
+            </div>
+            <p>{{ requirement.description|default:'No description provided.' }}</p>
+            <p>
+              Required skills:
+              {% for skill in requirement.required_skills.all %}
+                {{ skill.name }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                None
+              {% endfor %}
+            </p>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No job requirements added yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel-card">
+      <h3>Create group</h3>
+      <form method="post" action="{% url 'create_group' %}" class="stack-form">
+        {% csrf_token %}
+        {{ group_form.as_p }}
+        <button class="primary-button" type="submit">Create Group</button>
+      </form>
+      <div class="stack-list tight">
+        {% for group in groups %}
+          <article class="stack-item">
+            <div class="panel-title-row">
+              <h4>{{ group.name }}</h4>
+              <form method="post" action="{% url 'delete_group' group.id %}">
+                {% csrf_token %}
+                <button class="ghost-button" type="submit">Delete</button>
+              </form>
+            </div>
+            <p>{{ group.description }}</p>
+            <p>
+              Required skills:
+              {% for skill in group.skills_required.all %}
+                {{ skill.name }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                None
+              {% endfor %}
+            </p>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No groups created yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="panel-grid two-column">
+    <article class="panel-card">
+      <h3>Post event</h3>
+      <form method="post" action="{% url 'create_event' %}" class="stack-form">
+        {% csrf_token %}
+        {{ event_form.as_p }}
+        <button class="primary-button" type="submit">Publish Event</button>
+      </form>
+      <div class="stack-list tight">
+        {% for event in events %}
+          <article class="stack-item">
+            <div class="panel-title-row">
+              <h4>{{ event.name }}</h4>
+              <form method="post" action="{% url 'delete_event' event.id %}">
+                {% csrf_token %}
+                <button class="ghost-button" type="submit">Delete</button>
+              </form>
+            </div>
+            <p>{{ event.group.name }} | {{ event.event_date }}</p>
+            <p>{{ event.description }}</p>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No events published yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel-card">
+      <h3>Student monitoring</h3>
+      <div class="stack-list">
+        {% for student in students %}
+          <article class="stack-item">
+            <div class="panel-title-row">
+              <h4>{{ student.first_name|default:student.username }}</h4>
+              <form method="post" action="{% url 'delete_student' student.id %}">
+                {% csrf_token %}
+                <button class="ghost-button" type="submit">Delete</button>
+              </form>
+            </div>
+            <div class="meta-row">
+              <span class="pill">{{ student.student_profile.target_role|default:'No target role' }}</span>
+              <span class="pill accent">{{ student.student_profile.skills.count }} skills</span>
+            </div>
+            <p>
+              Skills:
+              {% for skill in student.student_profile.skills.all %}
+                {{ skill.name }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                No skills added
+              {% endfor %}
+            </p>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No students registered yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+</main>
+{% endblock %}

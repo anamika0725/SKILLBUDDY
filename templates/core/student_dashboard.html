@@ -1,0 +1,241 @@
+{% extends 'core/base.html' %}
+
+{% block title %}SkillBuddy | Student Dashboard{% endblock %}
+{% block eyebrow %}Student Space{% endblock %}
+
+{% block content %}
+<main class="dashboard-shell">
+  <section class="dashboard-header">
+    <div>
+      <p class="section-tag">Student dashboard</p>
+      <h2>{{ user.first_name|default:user.username }}, your growth path is ready.</h2>
+      <p class="muted-text">Track your readiness, update your skill profile, and register for opportunities.</p>
+    </div>
+    <form method="post" action="{% url 'delete_account' %}" class="stack-form">
+      {% csrf_token %}
+      <input type="hidden" name="confirm" value="on">
+      <button class="ghost-button" type="submit">Delete Account</button>
+    </form>
+  </section>
+
+  <section class="panel-grid two-column">
+    <article class="panel-card">
+      <div class="panel-title-row">
+        <h3>Your profile</h3>
+        <span class="pill">{{ profile.target_role|default:'Target role not set' }}</span>
+      </div>
+      <div class="chip-group">
+        {% for skill in student_skills %}
+          <div class="chip">
+            <span>{{ skill.name }}</span>
+            <form method="post" action="{% url 'remove_skill' skill.id %}">
+              {% csrf_token %}
+              <button type="submit">x</button>
+            </form>
+          </div>
+        {% empty %}
+          <div class="chip"><span>No skills added yet</span></div>
+        {% endfor %}
+      </div>
+      <form method="post" action="{% url 'add_skill' %}" class="inline-form">
+        {% csrf_token %}
+        {{ skill_form.name }}
+        <button class="primary-button" type="submit">Add Skill</button>
+      </form>
+      <form method="post" action="{% url 'update_skill' %}" class="stack-form skill-update-form">
+        {% csrf_token %}
+        {{ update_skill_form.current_skill }}
+        {{ update_skill_form.name }}
+        <button class="secondary-button" type="submit">Update Skill</button>
+      </form>
+    </article>
+
+    <article class="panel-card report-card">
+      <div class="panel-title-row">
+        <h3>Skill gap report</h3>
+        <span class="pill accent">{{ readiness_score }}% ready</span>
+      </div>
+      <p class="muted-text">This report refreshes from your latest saved skills, so every add or remove updates the recommendation path.</p>
+      <div class="report-grid">
+        <div>
+          <p class="mini-tag">Matched skills</p>
+          <div class="chip-group">
+            {% for skill in matched_skills %}
+              <div class="chip"><span>{{ skill.name }}</span></div>
+            {% empty %}
+              <div class="chip"><span>No matched skills yet</span></div>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <p class="mini-tag">Missing skills</p>
+          <div class="chip-group">
+            {% for skill in missing_skills %}
+              <div class="chip"><span>{{ skill.name }}</span></div>
+            {% empty %}
+              <div class="chip"><span>No missing skills</span></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="recommendation-box">
+        <p class="mini-tag">Suggestions</p>
+        <ul class="soft-list">
+          {% for skill in missing_skills %}
+            <li>Build {{ skill.name }} through projects, group collaboration, and one event this month.</li>
+          {% empty %}
+            <li>You currently match the selected job requirement. Keep practicing with projects and events.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section class="panel-grid two-column">
+    <article class="panel-card">
+      <div class="panel-title-row">
+        <h3>Groups</h3>
+        <span class="pill neutral">{{ user.joined_groups.count }} joined</span>
+      </div>
+      <div class="stack-list">
+        {% for group in groups %}
+          <article class="stack-item">
+            <h4>{{ group.name }}</h4>
+            <div class="meta-row">
+              <span class="pill neutral">{{ group.members.count }} members</span>
+              <span class="pill">
+                {% for skill in group.skills_required.all %}
+                  {{ skill.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                  Open group
+                {% endfor %}
+              </span>
+            </div>
+            <p>{{ group.description }}</p>
+            <form method="post" action="{% url 'toggle_group_membership' group.id %}">
+              {% csrf_token %}
+              <button type="submit">
+                {% if user in group.members.all %}Leave Group{% else %}Join Group{% endif %}
+              </button>
+            </form>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No groups available yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel-card">
+      <div class="panel-title-row">
+        <h3>Events and hackathons</h3>
+        <span class="pill neutral">{{ user.registered_events.count }} registered</span>
+      </div>
+      <div class="stack-list">
+        {% for event in events %}
+          <article class="stack-item">
+            <h4>{{ event.name }}</h4>
+            <div class="meta-row">
+              <span class="pill accent">{{ event.event_date }}</span>
+              <span class="pill neutral">{{ event.group.name }}</span>
+            </div>
+            <p>{{ event.description }}</p>
+            <form method="post" action="{% url 'toggle_event_registration' event.id %}">
+              {% csrf_token %}
+              <button type="submit">
+                {% if user in event.participants.all %}Cancel Registration{% else %}Register{% endif %}
+              </button>
+            </form>
+          </article>
+        {% empty %}
+          <article class="stack-item"><p>No events published yet.</p></article>
+        {% endfor %}
+      </div>
+    </article>
+  </section>
+
+  <section class="panel-grid two-column">
+    <article class="panel-card">
+      <div class="panel-title-row">
+        <h3>Resume Upload</h3>
+        <span class="pill neutral">PDF or TXT</span>
+      </div>
+      <p class="muted-text">Upload your resume here. The system will analyze it against your target job requirement.</p>
+      <form method="post" action="{% url 'upload_resume' %}" enctype="multipart/form-data" class="stack-form">
+        {% csrf_token %}
+        {{ resume_form.file }}
+        <button class="primary-button" type="submit">Upload and Analyze</button>
+      </form>
+      {% if resume %}
+        <p class="muted-text">Last uploaded: {{ resume.uploaded_at }}</p>
+        <p class="muted-text"><a href="{{ resume.file.url }}">View uploaded resume</a></p>
+      {% endif %}
+    </article>
+
+    <article class="panel-card report-card">
+      <div class="panel-title-row">
+        <h3>AI Resume Analysis</h3>
+        {% if resume %}
+          <span class="pill accent">{{ resume.analysis_score }}% ready</span>
+        {% else %}
+          <span class="pill neutral">No resume yet</span>
+        {% endif %}
+      </div>
+      {% if resume %}
+        {% if resume.analysis_summary %}
+          <div class="recommendation-box">
+            <p class="mini-tag">AI summary</p>
+            <p>{{ resume.analysis_summary }}</p>
+          </div>
+        {% endif %}
+        <div class="report-grid">
+          <div>
+            <p class="mini-tag">Detected strengths</p>
+            <div class="chip-group">
+              {% if resume_matched_skills %}
+                {% for skill in resume_matched_skills %}
+                  <div class="chip"><span>{{ skill }}</span></div>
+                {% endfor %}
+              {% else %}
+                <div class="chip"><span>No matched skills detected</span></div>
+              {% endif %}
+            </div>
+          </div>
+          <div>
+            <p class="mini-tag">Missing from resume</p>
+            <div class="chip-group">
+              {% if resume_missing_skills %}
+                {% for skill in resume_missing_skills %}
+                  <div class="chip"><span>{{ skill }}</span></div>
+                {% endfor %}
+              {% else %}
+                <div class="chip"><span>No missing skills</span></div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      <div class="recommendation-box">
+        <p class="mini-tag">Suggestions</p>
+        <ul class="soft-list">
+          {% if resume_suggestions %}
+            {% for item in resume_suggestions %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          {% else %}
+            {% if resume.is_ready %}
+              <li>Your resume looks reasonably aligned for this target role.</li>
+              <li>Keep improving projects and measurable achievements to strengthen it further.</li>
+            {% else %}
+              <li>Your resume is not fully ready yet for the target role.</li>
+              <li>Add the missing skills, related projects, and clearer evidence of practical work.</li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+      <p class="muted-text">Resume analysis also re-syncs whenever your saved skills change, so this AGP view stays aligned with your latest profile.</p>
+      {% else %}
+        <p class="muted-text">Upload a resume to get an analysis of whether you are ready for your target job.</p>
+      {% endif %}
+    </article>
+  </section>
+</main>
+{% endblock %}

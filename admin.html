@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillBuddy | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark">SB</div>
+        <div>
+          <p class="eyebrow">Admin Space</p>
+          <h1>SkillBuddy Dashboard</h1>
+        </div>
+      </div>
+      <nav class="top-actions">
+        <a class="nav-link" href="index.html">Home</a>
+        <button class="ghost-button" id="resetBtn" type="button">Reset Demo</button>
+        <button class="primary-button" id="logoutBtn" type="button">Logout</button>
+      </nav>
+    </header>
+
+    <main class="dashboard-shell">
+      <div class="dashboard-header">
+        <div>
+          <p class="section-tag">Admin dashboard</p>
+          <h2 id="adminWelcome"></h2>
+          <p class="muted-text">Manage job requirements, create groups, publish events, and monitor student progress.</p>
+        </div>
+      </div>
+
+      <section class="panel-grid three-column">
+        <article class="panel-card"><p class="mini-tag">Students</p><strong class="metric" id="totalStudents"></strong><span class="muted-text">Registered learners</span></article>
+        <article class="panel-card"><p class="mini-tag">Groups</p><strong class="metric" id="totalGroups"></strong><span class="muted-text">Communities managed</span></article>
+        <article class="panel-card"><p class="mini-tag">Events</p><strong class="metric" id="totalEvents"></strong><span class="muted-text">Open registrations</span></article>
+      </section>
+
+      <section class="panel-grid two-column">
+        <article class="panel-card">
+          <h3>Create job requirement</h3>
+          <form class="stack-form" id="roleForm">
+            <input id="roleNameInput" type="text" placeholder="Role title" required>
+            <textarea id="roleSkillsInput" rows="4" placeholder="Required skills separated by commas" required></textarea>
+            <button class="primary-button" type="submit">Save Requirement</button>
+          </form>
+          <div id="roleList" class="stack-list tight"></div>
+        </article>
+
+        <article class="panel-card">
+          <h3>Create group</h3>
+          <form class="stack-form" id="groupForm">
+            <input id="groupNameInput" type="text" placeholder="Group name" required>
+            <textarea id="groupDescInput" rows="3" placeholder="Short group description" required></textarea>
+            <input id="groupSkillsInput" type="text" placeholder="Relevant skills separated by commas" required>
+            <button class="primary-button" type="submit">Create Group</button>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel-grid two-column">
+        <article class="panel-card">
+          <h3>Post event</h3>
+          <form class="stack-form" id="eventForm">
+            <input id="eventNameInput" type="text" placeholder="Event name" required>
+            <select id="eventGroupSelect" required></select>
+            <input id="eventDateInput" type="date" required>
+            <textarea id="eventDescInput" rows="3" placeholder="Event details" required></textarea>
+            <button class="primary-button" type="submit">Publish Event</button>
+          </form>
+        </article>
+
+        <article class="panel-card">
+          <h3>Student monitoring</h3>
+          <div id="studentMonitor" class="stack-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>

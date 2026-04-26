@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %}SkillBuddy | Register{% endblock %}
+
+{% block content %}
+<main class="panel-grid two-column">
+  <section class="auth-side">
+    <p class="section-tag">Register</p>
+    <h2>Create a real account</h2>
+    <p class="hero-text">Register as a student to track skills, or as an admin to manage job requirements, groups, and events.</p>
+  </section>
+
+  <section class="auth-forms">
+    <form method="post" class="stack-form">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      {% for field in form %}
+        <label class="mini-note" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<p class="mini-note">{{ field.help_text }}</p>{% endif %}
+        {% if field.errors %}<p class="form-message">{{ field.errors|join:', ' }}</p>{% endif %}
+      {% endfor %}
+      <button class="primary-button" type="submit">Create Account</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

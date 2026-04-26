@@ -1,0 +1,66 @@
+--- PAGE 1 ---
+SkillBuddy: Skill Gap Analyzer  
+ 
+Skill Gap Analyzer for Students Using Web Technology 
+ Description 
+This project is a web -based platform that helps students identify the gap between their current skills and 
+the skills required by industries. It provides suggestions for improvement and allows collaboration 
+through groups. College placement cells, companie s, or admins can create skill -based groups, post 
+hackathons or events, and monitor student skill development. 
+ Features 
+1. User Roles & Authentication 
+ Student: Registers, enters skills, views skill gap reports, joins groups, participates in 
+hackathons. 
+ Admin/Company/College Placement Cell: Creates job requirements, manages groups, posts 
+events. 
+ Role-based authentication ensures only verified admins can access admin features. 
+2. Skill Gap Analysis 
+ Compares student skills with industry/job requirements. 
+ Generates a report showing matched skills, missing skills, and suggestions for improvement. 
+3. Groups 
+ Admin/Company/College can create skill-based groups. 
+ Students/employees can join groups according to their skills/interests. 
+ Groups help in skill enhancement and career development. 
+4. Hackathon & Events 
+ Admins or college cells can post hackathons or skill-building events in groups. 
+ Students can register for events directly from the platform. 
+ Events encourage skill improvement and placement preparation. 
+ 
+ Technology Used 
+ Frontend: HTML, CSS, JavaScript 
+ Backend: Python (Django) or Node.js 
+ Database: MySQL / SQLite 
+ Tools: VS Code, Git 
+
+--- PAGE 2 ---
+ Workflow 
+1. Student Workflow 
+ Student Login → Enter Skills → View Skill Gap Report → Join Groups → Register for 
+Hackathons → Upgrade Skills 
+2. Admin/Company Workflow 
+ Admin Login → Add Job Requirements → Create/Manage Groups → Post Hackathons → 
+Monitor Student Reports 
+3. Website Flow 
+Visitor opens website → Landing Page → Login/Register 
+        ↓ 
+System checks credentials & role 
+        ↓ 
+Role = Student → Student Dashboard 
+Role = Admin → Admin Dashboard 
+Invalid login → Error Message 
+ Database Tables (Simplified) 
+1. Users Table: UserID, Name, Email, Password, Role, Skills 
+2. Admin Table: AdminID, Email, Company/College, Verified 
+3. Groups Table: GroupID, Name, Description, CreatedBy, SkillsRequired 
+4. GroupMembership Table: UserID, GroupID, RoleInGroup (Member/Admin) 
+5. Events Table: EventID, Name, GroupID, Date, Description 
+ 
+ Future Scope 
+ Integrate machine learning for intelligent skill-gap prediction. 
+ Resume parsing and automated job suggestions. 
+ Advanced analytics for skill tracking and performance monitoring. 
+ Real-time hackathon leaderboards and group discussions. 
+ Integration with external job portals for live updates. 
+ 
+ 
+ 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillBuddy | Student Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-mark">SB</div>
+        <div>
+          <p class="eyebrow">Student Space</p>
+          <h1>SkillBuddy Dashboard</h1>
+        </div>
+      </div>
+      <nav class="top-actions">
+        <a class="nav-link" href="index.html">Home</a>
+        <button class="ghost-button" id="resetBtn" type="button">Reset Demo</button>
+        <button class="primary-button" id="logoutBtn" type="button">Logout</button>
+      </nav>
+    </header>
+
+    <main class="dashboard-shell">
+      <div class="dashboard-header">
+        <div>
+          <p class="section-tag">Student dashboard</p>
+          <h2 id="studentWelcome"></h2>
+          <p class="muted-text">Track your readiness, find the missing skills, and register for opportunities that move you forward.</p>
+        </div>
+      </div>
+
+      <section class="panel-grid two-column">
+        <article class="panel-card">
+          <div class="panel-title-row">
+            <h3>Your profile</h3>
+            <span class="pill" id="studentTargetRole"></span>
+          </div>
+          <p class="muted-text">Add or remove skills to instantly refresh your report.</p>
+          <div class="chip-group" id="studentSkillChips"></div>
+          <form class="inline-form" id="skillForm">
+            <input id="skillInput" type="text" placeholder="Add a skill like React or SQL" required>
+            <button class="primary-button" type="submit">Add Skill</button>
+          </form>
+        </article>
+
+        <article class="panel-card report-card">
+          <div class="panel-title-row">
+            <h3>Skill gap report</h3>
+            <span class="pill accent" id="readinessScore"></span>
+          </div>
+          <div class="report-grid">
+            <div>
+              <p class="mini-tag">Matched skills</p>
+              <div class="chip-group" id="matchedSkills"></div>
+            </div>
+            <div>
+              <p class="mini-tag">Missing skills</p>
+              <div class="chip-group" id="missingSkills"></div>
+            </div>
+          </div>
+          <div class="recommendation-box">
+            <p class="mini-tag">Suggestions</p>
+            <ul id="suggestionsList" class="soft-list"></ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel-grid two-column">
+        <article class="panel-card">
+          <div class="panel-title-row">
+            <h3>Recommended groups</h3>
+            <span class="pill neutral" id="membershipCount"></span>
+          </div>
+          <div id="studentGroups" class="stack-list"></div>
+        </article>
+
+        <article class="panel-card">
+          <div class="panel-title-row">
+            <h3>Hackathons and events</h3>
+            <span class="pill neutral" id="eventCount"></span>
+          </div>
+          <div id="studentEvents" class="stack-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="assets/js/student.js"></script>
+</body>
+</html>
