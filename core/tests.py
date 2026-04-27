@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import RegisterForm
 from .models import JobRequirement, Resume, Skill, StudentProfile
 
 
@@ -171,3 +172,26 @@ class AdminDeleteTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(get_user_model().objects.filter(id=self.student.id).exists())
+
+
+class PublicRegistrationTests(TestCase):
+    def test_public_registration_form_only_exposes_student_role(self):
+        form = RegisterForm()
+
+        self.assertEqual(form.fields['role'].choices, [('student', 'Student')])
+
+    def test_public_registration_rejects_admin_role_submission(self):
+        form = RegisterForm(data={
+            'first_name': 'Asha',
+            'username': 'asha_admin_attempt',
+            'email': 'asha@example.com',
+            'role': 'admin',
+            'organization': 'SkillBuddy',
+            'target_role': 'Frontend Developer',
+            'skills': 'HTML, CSS',
+            'password1': 'StrongPass123',
+            'password2': 'StrongPass123',
+        })
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('Select a valid choice.', form.errors['role'][0])

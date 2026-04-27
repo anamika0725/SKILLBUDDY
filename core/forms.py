@@ -10,7 +10,7 @@ class LoginForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
-    role = forms.ChoiceField(choices=User.ROLE_CHOICES)
+    role = forms.ChoiceField(choices=[('student', 'Student')], initial='student')
     email = forms.EmailField()
     organization = forms.CharField(required=False)
     target_role = forms.CharField(required=False)
@@ -20,25 +20,30 @@ class RegisterForm(UserCreationForm):
         model = User
         fields = ('first_name', 'username', 'email', 'role', 'organization', 'target_role', 'skills', 'password1', 'password2')
 
+    def clean_role(self):
+        role = self.cleaned_data.get('role')
+        if role != 'student':
+            raise forms.ValidationError('Public registration is available for students only.')
+        return role
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
-        user.role = self.cleaned_data['role']
+        user.role = 'student'
         user.organization = self.cleaned_data['organization']
 
         if commit:
             user.save()
-            if user.role == 'student':
-                profile, _ = StudentProfile.objects.get_or_create(user=user)
-                profile.target_role = self.cleaned_data['target_role']
-                profile.save()
-                for skill_name in self.cleaned_data['skills'].split(','):
-                    name = skill_name.strip()
-                    if name:
-                        skill = Skill.objects.filter(name__iexact=name).first()
-                        if not skill:
-                            skill = Skill.objects.create(name=name)
-                        profile.skills.add(skill)
+            profile, _ = StudentProfile.objects.get_or_create(user=user)
+            profile.target_role = self.cleaned_data['target_role']
+            profile.save()
+            for skill_name in self.cleaned_data['skills'].split(','):
+                name = skill_name.strip()
+                if name:
+                    skill = Skill.objects.filter(name__iexact=name).first()
+                    if not skill:
+                        skill = Skill.objects.create(name=name)
+                    profile.skills.add(skill)
         return user
 
 
